@@ -70,9 +70,6 @@ void FfmpegVideoOutputStream::WriteFrame(AVFrame* frame)
     pkt->data = NULL;
     pkt->size = 0;
 
-    int ret;
-    int got_packet = 1;
-
     /* encode the image */
     int response = avcodec_send_frame(codec_context, frame);
     while (response >= 0) {
@@ -202,7 +199,7 @@ FfmpegVideoOutputStream::~FfmpegVideoOutputStream()
     }
 
     av_free(frame);
-    avcodec_close(codec_context);
+    avcodec_free_context(&codec_context);
 }
 
 FfmpegVideoOutput::FfmpegVideoOutput(const std::string& filename, int base_frame_rate, int bit_rate, bool flip_image)

@@ -121,7 +121,7 @@ if [[ "$MANAGER" == "apt" ]]; then
     if ((DRYRUN > 0));  then PKGS_OPTIONS+=(--dry-run); SUDO=""; fi
     PKGS_REQUIRED+=(libgl1-mesa-dev libwayland-dev libxkbcommon-dev wayland-protocols libegl1-mesa-dev)
     PKGS_REQUIRED+=(libc++-dev libepoxy-dev libglew-dev libeigen3-dev cmake g++ ninja-build)
-    PKGS_RECOMMENDED+=(libjpeg-dev libpng-dev catch2)
+    PKGS_RECOMMENDED+=(libjpeg-dev libpng-dev libopenexr-dev catch2)
     PKGS_RECOMMENDED+=(libavcodec-dev libavutil-dev libavformat-dev libswscale-dev libavdevice-dev)
     PKGS_ALL+=(libdc1394-dev libraw1394-dev libopenni-dev python3-dev)
 elif [[ "$MANAGER" == "dnf" ]]; then
@@ -139,7 +139,7 @@ elif [[ "$MANAGER" == "dnf" ]]; then
 elif [[ "$MANAGER" == "pacman" ]]; then
     SUDO="sudo"
     PKGS_UPDATE=""  # databases and packages are updated in -Syu install options
-    PKGS_OPTIONS+=(-Syu)
+    PKGS_OPTIONS+=(-Syu --needed)
     PKGS_REQUIRED+=(mesa wayland libxkbcommon wayland-protocols libc++ glew eigen cmake gcc ninja)
     PKGS_RECOMMENDED+=(libjpeg-turbo libpng ffmpeg)
     PKGS_ALL+=(libdc1394 libraw1394 openni python3)
@@ -159,7 +159,7 @@ elif [[ "$MANAGER" == "brew" ]]; then
     PKGS_OPTIONS+=(install)
     if ((VERBOSE > 0)); then PKGS_OPTIONS+=(--verbose); fi
     PKGS_REQUIRED+=(glew eigen cmake ninja)
-    PKGS_RECOMMENDED+=(libjpeg-turbo libpng openexr libtiff ffmpeg lz4 zstd catch2)
+    PKGS_RECOMMENDED+=(libjpeg-turbo libpng openexr libtiff ffmpeg lz4 zstd catch2 python-setuptools)
     # Brew doesn't have a dryrun option
     if ((DRYRUN > 0));  then
         MANAGER="echo $MANAGER"

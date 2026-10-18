@@ -431,8 +431,8 @@ void X11Window::ProcessEvents()
         {
             const int button = ev.xbutton.button-1;
             MouseSignal(MouseEvent{
-               (float)ev.xbutton.x, (float)ev.xbutton.y,
-               GetEventFlagsFromXState(ev.xkey.state),
+               WindowInputEvent{(float)ev.xbutton.x, (float)ev.xbutton.y,
+                    GetEventFlagsFromXState(ev.xkey.state)},
                button, ev.xbutton.type == ButtonPress
            });
            break;
@@ -499,8 +499,8 @@ void X11Window::ProcessEvents()
 
             if(key >=0) {
                 KeyboardSignal(KeyboardEvent{
-                    (float)ev.xkey.x, (float)ev.xkey.y,
-                    GetEventFlagsFromXState(ev.xkey.state),
+                    WindowInputEvent{(float)ev.xkey.x, (float)ev.xkey.y,
+                        GetEventFlagsFromXState(ev.xkey.state)},
                     (unsigned char)key, ev.type == KeyPress
                 });
             }
@@ -560,7 +560,7 @@ PANGOLIN_REGISTER_FACTORY(X11Window)
               {"double_buffered","true","Whether the window should be double buffered"},
               {"sample_buffers","1",""},
               {"samples","1",""},
-              {PARAM_GL_PROFILE,"Ignored for now"},
+              {PARAM_GL_PROFILE,{},"Ignored for now"},
           }};
       }
 

@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
 project("Pangolin")
 set(PANGOLIN_VERSION_MAJOR 0)
 set(PANGOLIN_VERSION_MINOR 9)
-set(PANGOLIN_VERSION_PATCH 2)
+set(PANGOLIN_VERSION_PATCH 6)
 set(PANGOLIN_VERSION ${PANGOLIN_VERSION_MAJOR}.${PANGOLIN_VERSION_MINOR}.${PANGOLIN_VERSION_PATCH})
 
 if(NOT CMAKE_CXX_STANDARD)
@@ -83,6 +83,20 @@ if(BUILD_ASAN)
         -fsanitize=leak \
         -fsanitize=object-size \
     ")
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
+    add_compile_options(-Wall -Wextra -Werror)
+    # error: ISO C++ prohibits anonymous structs
+    # add_compile_options(-Wpedantic)
+    # ignore "parentheses" warning for custom "picojson" fork
+    add_compile_options(-Wno-parentheses)
+    add_compile_options(-Wno-null-pointer-arithmetic)
+    add_compile_options(-Wno-null-pointer-subtraction)
+    if(CMAKE_COMPILER_IS_GNUCC)
+        add_compile_options(-Werror=maybe-uninitialized)
+    endif()
+    add_compile_options(-Werror=vla)
 endif()
 
 #######################################################

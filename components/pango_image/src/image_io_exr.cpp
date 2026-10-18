@@ -1,13 +1,16 @@
 #include <pangolin/platform.h>
 
+#include <cstdint>
 #include <fstream>
 #include <pangolin/image/typed_image.h>
 
 #ifdef HAVE_OPENEXR
 #include <ImfChannelList.h>
+#include <ImfFrameBuffer.h>
 #include <ImfInputFile.h>
 #include <ImfOutputFile.h>
 #include <ImfIO.h>
+#include <ImfHeader.h>
 #endif // HAVE_OPENEXR
 
 namespace pangolin {
@@ -54,12 +57,12 @@ class StdIStream: public Imf::IStream
         return true;
     }
 
-    virtual Imf::Int64 tellg ()
+    virtual uint64_t tellg ()
     {
         return std::streamoff (_is->tellg());
     }
 
-    virtual void seekg (Imf::Int64 pos)
+    virtual void seekg (uint64_t pos)
     {
         _is->seekg (pos);
     }
@@ -135,7 +138,7 @@ TypedImage LoadExr(std::istream& source)
     const Imf::ChannelList &channels = file.header().channels();
     size_t c = 0;
     unsigned int d = format.channel_bit_depth;
-    Imf::PixelType pixeltype;
+    Imf::PixelType pixeltype = Imf::PixelType::UINT;
     switch(d)
     {
       case 16: pixeltype = Imf::HALF; break;
